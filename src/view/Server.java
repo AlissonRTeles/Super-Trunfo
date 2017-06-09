@@ -1,3 +1,6 @@
+package view;
+import controller.LeitorArquivos;
+
 
 public class Server {
 	public void Init(){

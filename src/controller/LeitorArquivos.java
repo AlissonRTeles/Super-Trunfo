@@ -1,3 +1,4 @@
+package controller;
 
 
 import java.io.BufferedReader;
@@ -37,7 +38,6 @@ public class LeitorArquivos {
 			
 			while (linha != null) {
 				linha = lerArq.readLine();
-				System.out.println(linha);
 				
 				if (linha != null){
 					String[] entradas = linha.split(this.delimitador);
