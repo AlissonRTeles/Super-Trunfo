@@ -5,6 +5,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import models.Carta;
 
 public class LeitorArquivos {
 	String nome   = "";
@@ -28,7 +32,8 @@ public class LeitorArquivos {
 		}
 	}
 	
-	public void leArquivo(){
+	public ArrayList<String[]> leArquivo(){
+		ArrayList<String[]> linhas = new ArrayList<String[]>();
 		
 		try {
 			FileReader arq = new FileReader(this.nome);
@@ -41,10 +46,7 @@ public class LeitorArquivos {
 				
 				if (linha != null){
 					String[] entradas = linha.split(this.delimitador);
-					for (int i = 0; i < entradas.length-1; i++) {
-						
-					}
-					
+					linhas.add(entradas);
 				}
 
 			}
@@ -53,14 +55,14 @@ public class LeitorArquivos {
 			} catch (IOException e) {
 				e.getMessage();
 			}
+		
+		return linhas;
 	}
 
 	public String getNome() {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 		
+	
 }

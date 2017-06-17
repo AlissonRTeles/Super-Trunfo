@@ -3,11 +3,13 @@ package models;
 public class Carta {
 	private String cNome;
 	private String cCod;
+	private String cTipo;
 	private float nPeso;
 	private float nVelocidade;
 	private float nAltitude;
 	private float nVoo;
 	private float nAltura;
+	private float nComprimento;
 	private Boolean isSTrunfo;
 	
 	
@@ -28,6 +30,24 @@ public class Carta {
 		this.nAltura = nAltura;
 		this.isSTrunfo = isSTrunfo;
 	}
+	
+	
+	public float getnComprimento() {
+		return nComprimento;
+	}
+
+	public void setnComprimento(float nComprimento) {
+		this.nComprimento = nComprimento;
+	}
+
+	public String getcTipo() {
+		return cTipo;
+	}
+
+	public void setcTipo(String cTipo) {
+		this.cTipo = cTipo;
+	}
+
 	public String getcNome() {
 		return cNome;
 	}

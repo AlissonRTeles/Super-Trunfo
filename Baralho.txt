@@ -1,33 +1,33 @@
 CODIGO;TIPO;NOME;PESO;VELOCIDADE;ALTITUDE;COMPRIMENTO;ALTURA;SUPERTRUNFO
-1A;Jatos Leves;Cessna Citation X;16193;945;13636;22,01;5,76;0
-1B;Jatos Leves;Swearingen SJ 30;5580;825;13100;12,09;3,94;0
-1C;Jatos Leves;IAI 1124 Westwind;10375;858;12500;15,93;4,81;0
-1D;Jatos Leves;Beech Ceechjet 400;7309;850;11800;14,8;4,5;0
-2A;Jatos de Luxo;Canadair Global Express;41275;880;15500;30,2;7,5;0
-2B;Jatos de Luxo;Gulfstream G 1159-V;40370;830;15500;29,4;7,7;0
-2C;Jatos de Luxo;Dassault Falcon 2000;16240;878;15500;20,23;6,98;0
-2D;Jatos de Luxo;Yakoklev YAH40;16000;550;10000;20,36;6,5;0
-3A;Linha Regional;Bombardier CRJ 700;32885;784;10600;32,41;7,32;0
-3B;Linha Regional;British Aerospace 146-200;42185;730;9600;28,55;8,61;0
-3C;Linha Regional;Bombardier CRJ 900;36000;790;10600;36,27;7,29;0
-3D;Linha Regional;Fairchild 329 Jet;15200;720;7000;21,28;7,2;0
-4A;Media Distancia;Boeing 757-300;122472;800;11200;54,5;13,6;0
-4B;Media Distancia;Airbus A319-100;64000;803;11820;33,84;11,76;0
-4C;Media Distancia;Yakolev YAH-42;56500;750;9050;36,38;9,83;0
-4D;Media Distancia;Airbus A330-300;230000;846;11820;63,7;16,84;0
-5A;Longa Distancia;Airbus A340-600;365000;857;11820;63,45;17,8;0
-5B;Longa Distancia;Boeing 414-400;396900;920;10600;70,7;19,3;0
-5C;Longa Distancia;Concorde;185065;2170;15550;62,17;12,19;1
-5D;Longa Distancia;Airbus A3XX-200;583000;850;11820;78,9;24,1;0
-6A;Cargueiros;DC-8-73F;16100;880;11600;57,1;13,1;0
-6B;Cargueiros;Airbus A310 200F;142000;840;11200;46,66;15,81;0
-6C;Cargueiros;Boeing 757-200PF;115650;860;11600;47,3;13,6;0
-6D;Cargueiros;Boeing 767-300F ER;186850;860;10600;55;15,9;0
-7A;Super Cargueiro;Airbus A300-600AT;150000;780;10000;56,16;17,25;0
-7B;Super Cargueiro;Ilyushin IL-76MF;210000;780;13100;53,19;14,45;0
-7C;Super Cargueiro;Boeing 747-100;340200;920;10600;70,7;19,3;0
-7D;Super Cargueiro;Antonov An-225;600000;820;10000;84;18,1;0
-8A;Defesa;Dassault Rafale;22500;2350;16775;15,27;5,34;0
-8B;Defesa;Sukhoi S-37;17700;2350;17900;21,9;6,4;0
-8C;Defesa;AMX International;13000;849;12900;13,23;3,75;0
-8D;Defesa;Saab JA39 Gripen;13000;1700;18000;14,10;4,7;0
+1A;Jatos Leves;Cessna Citation X;16193;945;13636;22.01;5.76;0
+1B;Jatos Leves;Swearingen SJ 30;5580;825;13100;12.09;3.94;0
+1C;Jatos Leves;IAI 1124 Westwind;10375;858;12500;15.93;4.81;0
+1D;Jatos Leves;Beech Ceechjet 400;7309;850;11800;14.8;4.5;0
+2A;Jatos de Luxo;Canadair Global Express;41275;880;15500;30.2;7.5;0
+2B;Jatos de Luxo;Gulfstream G 1159-V;40370;830;15500;29.4;7.7;0
+2C;Jatos de Luxo;Dassault Falcon 2000;16240;878;15500;20.23;6.98;0
+2D;Jatos de Luxo;Yakoklev YAH40;16000;550;10000;20.36;6.5;0
+3A;Linha Regional;Bombardier CRJ 700;32885;784;10600;32.41;7.32;0
+3B;Linha Regional;British Aerospace 146-200;42185;730;9600;28.55;8.61;0
+3C;Linha Regional;Bombardier CRJ 900;36000;790;10600;36.27;7.29;0
+3D;Linha Regional;Fairchild 329 Jet;15200;720;7000;21.28;7.2;0
+4A;Media Distancia;Boeing 757-300;122472;800;11200;54.5;13.6;0
+4B;Media Distancia;Airbus A319-100;64000;803;11820;33.84;11.76;0
+4C;Media Distancia;Yakolev YAH-42;56500;750;9050;36.38;9.83;0
+4D;Media Distancia;Airbus A330-300;230000;846;11820;63.7;16.84;0
+5A;Longa Distancia;Airbus A340-600;365000;857;11820;63.45;17.8;0
+5B;Longa Distancia;Boeing 414-400;396900;920;10600;70.7;19.3;0
+5C;Longa Distancia;Concorde;185065;2170;15550;62.17;12.19;1
+5D;Longa Distancia;Airbus A3XX-200;583000;850;11820;78.9;24.1;0
+6A;Cargueiros;DC-8-73F;16100;880;11600;57.1;13.1;0
+6B;Cargueiros;Airbus A310 200F;142000;840;11200;46.66;15.81;0
+6C;Cargueiros;Boeing 757-200PF;115650;860;11600;47.3;13.6;0
+6D;Cargueiros;Boeing 767-300F ER;186850;860;10600;55;15.9;0
+7A;Super Cargueiro;Airbus A300-600AT;150000;780;10000;56.16;17.25;0
+7B;Super Cargueiro;Ilyushin IL-76MF;210000;780;13100;53.19;14.45;0
+7C;Super Cargueiro;Boeing 747-100;340200;920;10600;70.7;19.3;0
+7D;Super Cargueiro;Antonov An-225;600000;820;10000;84;18.1;0
+8A;Defesa;Dassault Rafale;22500;2350;16775;15.27;5.34;0
+8B;Defesa;Sukhoi S-37;17700;2350;17900;21.9;6.4;0
+8C;Defesa;AMX International;13000;849;12900;13.23;3.75;0
+8D;Defesa;Saab JA39 Gripen;13000;1700;18000;14.10;4.7;0
