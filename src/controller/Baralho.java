@@ -10,20 +10,20 @@ import java.util.Random;
 import models.Carta;
 
 public class Baralho {
-	List<Carta> cartas;
-	LeitorArquivos leitor;
-	
+	private List<Carta> cartas;
+	private LeitorArquivos leitor;
+	final   String cFileCard = "Baralho.txt";
 	
 	public Baralho() {
-		this.leitor = new LeitorArquivos("Baralho.txt");
+		this.leitor = new LeitorArquivos(this.cFileCard);
 		this.cartas = new LinkedList<Carta>();
 	}
-	
+		 
 	private void embaralhaCarta(){
 		long seed = System.nanoTime();
 		Collections.shuffle(this.cartas, new Random(seed));
 	}
-	
+
 	private void carregaCartas(){
 		ArrayList<String[]> retFile = new ArrayList<String[]>();
 		Iterator<String[]> it;
@@ -58,6 +58,7 @@ public class Baralho {
 		Baralho b = new Baralho();
 		b.carregaCartas();
 		b.embaralhaCarta();
+		
 	
 	}
 	

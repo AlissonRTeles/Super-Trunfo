@@ -11,7 +11,7 @@ public class Client{
 
 	/************************************************************************************/
 	public static void main(String [] args) throws IOException{
-
+		
 		try{			
 			Socket cliente = new Socket("127.0.0.1",23456);
 			
@@ -26,6 +26,8 @@ public class Client{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+		
+		
 	}
 	/************************************************************************************/
 
