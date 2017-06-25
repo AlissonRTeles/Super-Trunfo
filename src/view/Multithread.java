@@ -1,6 +1,8 @@
 package view;
 import java.net.Socket;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -24,7 +26,13 @@ public class Multithread extends Thread{
 	
 		try{
 			//enviando mensagem para cliente
-			out.println("Mensagem do Servidor");
+			out.println("Você foi conectado.");
+			
+			//Recebendo mensagem do cliente
+			BufferedReader in = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+			String str = in.readLine();
+			System.out.println("Jogador conectado: "+str);
+			
 			cliente.close();
 
 		}catch(IOException e) { 
