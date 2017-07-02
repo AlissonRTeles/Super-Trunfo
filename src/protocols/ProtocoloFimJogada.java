@@ -10,6 +10,15 @@ public class ProtocoloFimJogada implements Serializable{
 	public String  mensagem;
 	public Baralho cartasRodada;
 	
+	
+	
+	public ProtocoloFimJogada(Boolean isGanhador, String mensagem, Baralho cartasRodada) {
+		super();
+		this.isGanhador = isGanhador;
+		this.mensagem = mensagem;
+		this.cartasRodada = cartasRodada;
+	}
+	
 	public Boolean getIsGanhador() {
 		return isGanhador;
 	}

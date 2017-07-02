@@ -8,6 +8,13 @@ public class ProtocoloInicioJogada implements Serializable {
 	private Boolean lMensagem;
 	public  String  mensagem;
 	
+	
+	public ProtocoloInicioJogada(int nJogada, Boolean lMensagem) {
+		super();
+		this.nJogada = nJogada;
+		this.lMensagem = lMensagem;
+	}
+	
 	public String getMensagem() {
 		return mensagem;
 	}

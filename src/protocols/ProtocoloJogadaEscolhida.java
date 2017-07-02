@@ -10,6 +10,11 @@ public class ProtocoloJogadaEscolhida implements Serializable{
 	private int atributoEscolhido;
 	public  String  mensagem;
 	
+	public ProtocoloJogadaEscolhida(Carta cartaEscolhida, int atributoEscolhido) {
+		super();
+		this.cartaEscolhida = cartaEscolhida;
+		this.atributoEscolhido = atributoEscolhido;
+	}
 	public Carta getCartaEscolhida() {
 		return cartaEscolhida;
 	}
