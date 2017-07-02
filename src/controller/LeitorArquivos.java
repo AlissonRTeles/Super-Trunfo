@@ -1,4 +1,5 @@
 package controller;
+import java.io.Serializable;
 
 
 import java.io.BufferedReader;
@@ -10,7 +11,8 @@ import java.util.List;
 
 import models.Carta;
 
-public class LeitorArquivos {
+public class LeitorArquivos implements Serializable{
+	private static final long serialVersionUID = 1L;
 	String nome   = "";
 	String delimitador =";";
 	

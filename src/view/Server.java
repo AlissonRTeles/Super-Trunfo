@@ -52,7 +52,7 @@ public class Server {
 				
 				Socket cliente = servidor.accept();
 				
-				protocolo1 = new ProtocoloEnviaBaralho("Voce e o jogador "+nCount);
+				protocolo1 = new ProtocoloEnviaBaralho("Voce e o jogador "+nCount, BaralhoList.get(nCount-1));
 
 				ObjectOutputStream  oos = new ObjectOutputStream(cliente.getOutputStream());
 				sendsomething(oos,protocolo1);

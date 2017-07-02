@@ -1,15 +1,18 @@
 package controller;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.io.Serializable;
 
 import models.Carta;
 
-public class Baralho {
+public class Baralho  implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private List<Carta> cartas;
 	private LeitorArquivos leitor;
 	final   String cFileCard = "Baralho.txt";

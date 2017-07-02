@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+import controller.Baralho;
 import protocols.ProtocoloEnviaBaralho;
 
 
@@ -16,6 +17,7 @@ public class Client{
 	public Scanner scanner = new Scanner(System.in);
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
+	private Baralho baralho;
 	
 	 
 
@@ -56,6 +58,8 @@ public class Client{
 			//Recebe
 			ProtocoloEnviaBaralho protocol = (ProtocoloEnviaBaralho)returnsomething(ois);
 			System.out.println(protocol.getcMensagem());
+			baralho = protocol.getBaralho();
+			System.out.println("Primeira Carta:"+baralho.getCartas().get(0).getcNome());
 			
 			protocol.setcMensagem("Aguardando inicio do jogo.");
 			
