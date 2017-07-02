@@ -1,20 +1,11 @@
 package view;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-import org.omg.CORBA.portable.InputStream;
-
-import controller.ProtocoloEnviaBaralho;
-
-import java.net.ServerSocket;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import protocols.ProtocoloEnviaBaralho;
 
 
 

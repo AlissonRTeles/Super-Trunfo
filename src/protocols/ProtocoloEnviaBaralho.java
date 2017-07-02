@@ -1,5 +1,7 @@
-package controller;
+package protocols;
 import java.io.Serializable;
+
+import controller.Baralho;
 
 public class ProtocoloEnviaBaralho  implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -13,9 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import controller.Baralho;
 import controller.LeitorArquivos;
-import controller.ProtocoloEnviaBaralho;
 import models.Carta;
+import protocols.ProtocoloEnviaBaralho;
 
 
 public class Server {
@@ -23,27 +24,25 @@ public class Server {
 	private Integer nJogadores = 0;
 	private ServerSocket servidor;
 	public  Scanner in = new Scanner(System.in);
+	
 	private List<Socket> SockList = new ArrayList<Socket>();
 	private List<ObjectOutputStream> SendObjList = new ArrayList<ObjectOutputStream>();
 	private List<ObjectInputStream> RecvObjList = new ArrayList<ObjectInputStream>();
+	private List<Baralho> BaralhoList           = new ArrayList<Baralho>();
 	
 	ProtocoloEnviaBaralho protocolo1;
 	
-
 	private Socket cliente;
 	
-	
-	public void Init(){
-		this.nJogadores = 2;
+	public void Init(){		
 	}
 	
 	public void createSocket() throws IOException{
-		this.servidor = new ServerSocket(this.nPorta);
+		this.servidor = new ServerSocket(this.nPorta);		
 	}
 	
 	public void aguardaJogadoresSk() throws IOException, ClassNotFoundException{
-		//aguarda conexoes
-		//fazer parametro para pedir a quantidade de conexï¿½es
+		
 		int nCount = 1;
 		
 		while (nCount <= this.nJogadores){			
@@ -53,7 +52,7 @@ public class Server {
 				
 				Socket cliente = servidor.accept();
 				
-				protocolo1 = new ProtocoloEnviaBaralho("Voce é o jogador "+nCount);
+				protocolo1 = new ProtocoloEnviaBaralho("Voce e o jogador "+nCount);
 
 				ObjectOutputStream  oos = new ObjectOutputStream(cliente.getOutputStream());
 				sendsomething(oos,protocolo1);
@@ -61,12 +60,7 @@ public class Server {
 				ObjectInputStream ois =  new ObjectInputStream(cliente.getInputStream());
 				returnsomething(ois);
 
-				
-
-				
 				System.out.println("Cliente conectado do IP "+cliente.getInetAddress().getHostAddress());
-							
-				protocolo1 = new ProtocoloEnviaBaralho("BLABLABLA");
 
 				System.out.println("Conectado "+nCount+" de "+nJogadores);
 				
@@ -74,7 +68,6 @@ public class Server {
 				SendObjList.add(oos);
 				RecvObjList.add(ois);
 
-				
 				nCount ++;
 			}catch(IOException e){
 				e.printStackTrace();
@@ -102,23 +95,46 @@ public class Server {
 	}
 	
 	public void rodaJogo() throws IOException, ClassNotFoundException {	
+		// -- carrega as cartas do jogo 
 		Init();		
+		
 		System.out.println("Informe o numero de jogadores:");		
+		
 		this.nJogadores = in.nextInt();
 
 		createSocket();
-		
+		separaCartas();
 		aguardaJogadoresSk();
 		
 		
+			
 		
 	}
 	
-	public static void main(String[] args) throws IOException, ClassNotFoundException{
-		Server s = new Server();
-		s.rodaJogo();
+	public void separaCartas() {
+		int nCountJgr = 0;
+		Baralho auxBaralho = new Baralho();
+		auxBaralho.Init();
+		
+		List<Carta> cartas = auxBaralho.getCartas();
+		
+		for (int i = 0; i < nJogadores; i++) {
+			BaralhoList.add(new Baralho());
+		}
+		
+		for (Carta carta : cartas) {
+			
+			if (nCountJgr==this.nJogadores) {
+				nCountJgr = 0;
+			}
+			
+			BaralhoList.get(nCountJgr).getCartas().add(carta);
+			
+			nCountJgr++;
+			
+		}
+		
 	}
-
 	
 	public void sendsomething (ObjectOutputStream oos, Object protocol) throws IOException{
 		oos.writeObject(protocol);
@@ -132,4 +148,8 @@ public class Server {
 		System.out.println("Mensagem: "+protocoloteste.getcMensagem());
 	}
 	
+	public static void main(String[] args) throws IOException, ClassNotFoundException{
+		Server s = new Server();
+		s.rodaJogo();
+	}
 }

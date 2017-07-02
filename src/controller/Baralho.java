@@ -14,6 +14,11 @@ public class Baralho {
 	private LeitorArquivos leitor;
 	final   String cFileCard = "Baralho.txt";
 	
+	public void Init () {
+		carregaCartas();
+		embaralhaCarta();
+		
+	}
 	public Baralho() {
 		this.leitor = new LeitorArquivos(this.cFileCard);
 		this.cartas = new LinkedList<Carta>();
@@ -54,12 +59,14 @@ public class Baralho {
 		
 	}
 	
-	public static void main(String[] args) {
-		Baralho b = new Baralho();
-		b.carregaCartas();
-		b.embaralhaCarta();
-		
-	
+	public List<Carta> getCartas() {
+		return cartas;
 	}
+	public void setCartas(List<Carta> cartas) {
+		this.cartas = cartas;
+	}
+	
+	
+	
 	
 }
