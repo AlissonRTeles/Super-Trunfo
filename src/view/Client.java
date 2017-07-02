@@ -34,20 +34,18 @@ public class Client{
 			Socket cliente = new Socket("127.0.0.1",23456);
 			
 			ObjectInputStream ois =  new ObjectInputStream(cliente.getInputStream());
+			//Recebe
 			ProtocoloEnviaBaralho protocoloteste = (ProtocoloEnviaBaralho)ois.readObject();			
-			System.out.println("Mensagem1: "+protocoloteste.getcMensagem());
+			System.out.println("Mensagem: "+protocoloteste.getcMensagem());
 						
-			protocoloteste.setcMensagem("recebi");
+			protocoloteste.setcMensagem("Estou aguardando o inicio do jogo");
 			
 			ObjectOutputStream  oos = new ObjectOutputStream(cliente.getOutputStream());
+			//Envia
 			oos.writeObject(protocoloteste);
 			oos.flush();
 			oos.reset();			
-			
-			//ObjectInputStream ois2 =  new ObjectInputStream(cliente.getInputStream());
-			protocoloteste = (ProtocoloEnviaBaralho)ois.readObject();			
-			System.out.println("Mensagem2: "+protocoloteste.getcMensagem());
-			
+				
 			//Aguardar recebimento do baralho.
 			
 			//Aguarda pra saber se é o jogador do turno 

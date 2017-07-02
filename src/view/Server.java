@@ -25,6 +25,7 @@ public class Server {
 	public  Scanner in = new Scanner(System.in);
 	private List<Socket> SockList = new ArrayList<Socket>();
 	private List<ObjectOutputStream> SendObjList = new ArrayList<ObjectOutputStream>();
+	private List<ObjectInputStream> RecvObjList = new ArrayList<ObjectInputStream>();
 	
 	ProtocoloEnviaBaralho protocolo1;
 	
@@ -51,9 +52,18 @@ public class Server {
 				System.out.println("Aguardando Cliente:"+nCount);
 				
 				Socket cliente = servidor.accept();
-				ObjectOutputStream  oos = new ObjectOutputStream(cliente.getOutputStream());
-				//Enviando Mensagem para o Cliente.
+				
+				protocolo1 = new ProtocoloEnviaBaralho("Voce é o jogador "+nCount);
 
+				ObjectOutputStream  oos = new ObjectOutputStream(cliente.getOutputStream());
+				sendsomething(oos,protocolo1);
+				
+				ObjectInputStream ois =  new ObjectInputStream(cliente.getInputStream());
+				returnsomething(ois);
+
+				
+
+				
 				System.out.println("Cliente conectado do IP "+cliente.getInetAddress().getHostAddress());
 							
 				protocolo1 = new ProtocoloEnviaBaralho("BLABLABLA");
@@ -62,6 +72,7 @@ public class Server {
 				
 				SockList.add(cliente);
 				SendObjList.add(oos);
+				RecvObjList.add(ois);
 
 				
 				nCount ++;
@@ -70,18 +81,24 @@ public class Server {
 			}
 		}
 		
-		
+		/*
 		
 		for (int i = 0; i < nJogadores; i++) {
 
 			sendsomething(SendObjList.get(i),protocolo1);
-			returnsomething(SockList.get(i));
+			returnsomething(RecvObjList.get(i));
 			sendsomething(SendObjList.get(i),protocolo1);
 	
 		}
 		
+		sendsomething(SendObjList.get(0),protocolo1);
+		sendsomething(SendObjList.get(1),protocolo1);
+
 		
-		
+		returnsomething(RecvObjList.get(0));
+		returnsomething(RecvObjList.get(1));
+
+		*/
 	}
 	
 	public void rodaJogo() throws IOException, ClassNotFoundException {	
@@ -92,6 +109,8 @@ public class Server {
 		createSocket();
 		
 		aguardaJogadoresSk();
+		
+		
 		
 	}
 	
@@ -108,8 +127,7 @@ public class Server {
 	}
 	
 	
-	public void returnsomething (Socket sock) throws IOException, ClassNotFoundException{
-		ObjectInputStream ois =  new ObjectInputStream(sock.getInputStream());
+	public void returnsomething (ObjectInputStream ois) throws IOException, ClassNotFoundException{
 		ProtocoloEnviaBaralho protocoloteste = (ProtocoloEnviaBaralho)ois.readObject();			
 		System.out.println("Mensagem: "+protocoloteste.getcMensagem());
 	}
