@@ -19,43 +19,62 @@ import java.io.PrintWriter;
 
 
 public class Client{
+	public Socket cliente;
+	final   Integer nPorta     = 23456;
+	private String host = "127.0.0.1";
+	public Scanner scanner = new Scanner(System.in);
+	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
 	
 	 
 
 	/**
 	 * @throws ClassNotFoundException **********************************************************************************/
 	public static void main(String [] args) throws IOException, ClassNotFoundException{
+		Client c = new Client();
+		c.rodaJogo();
+	}
+	
+	public void sendsomething (ObjectOutputStream oos, Object protocol) throws IOException{
+		oos.writeObject(protocol);
+		oos.flush();
+		oos.reset();
+	}
+	
+	
+	public Object returnsomething (ObjectInputStream ois) throws IOException, ClassNotFoundException{
+		Object protocol = ois.readObject();			
+		return(protocol);
+	}
+	
+	public void rodaJogo() throws IOException, ClassNotFoundException {	
+		createSocket();
+		conexaoServer();		
 		
-		Scanner scanner = new Scanner(System.in);
-		String nomeJogador;
 		
-		
-		try{			
-			Socket cliente = new Socket("127.0.0.1",23456);
-			
-			ObjectInputStream ois =  new ObjectInputStream(cliente.getInputStream());
+	}
+	
+	public void createSocket() throws IOException{
+		this.cliente = new Socket(this.host,this.nPorta);
+	}
+	
+	
+	public void conexaoServer() throws ClassNotFoundException{
+		try{
+			ois =  new ObjectInputStream(this.cliente.getInputStream());
 			//Recebe
-			ProtocoloEnviaBaralho protocoloteste = (ProtocoloEnviaBaralho)ois.readObject();			
-			System.out.println("Mensagem: "+protocoloteste.getcMensagem());
-						
-			protocoloteste.setcMensagem("Estou aguardando o inicio do jogo");
+			ProtocoloEnviaBaralho protocol = (ProtocoloEnviaBaralho)returnsomething(ois);
+			System.out.println(protocol.getcMensagem());
 			
-			ObjectOutputStream  oos = new ObjectOutputStream(cliente.getOutputStream());
+			protocol.setcMensagem("Aguardando inicio do jogo.");
+			
+			oos = new ObjectOutputStream(this.cliente.getOutputStream());
 			//Envia
-			oos.writeObject(protocoloteste);
-			oos.flush();
-			oos.reset();			
-				
-			//Aguardar recebimento do baralho.
+			sendsomething(oos,protocol);
 			
-			//Aguarda pra saber se é o jogador do turno 
-			 
-			cliente.close();
-
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		
 		
 	}
 	/************************************************************************************/
