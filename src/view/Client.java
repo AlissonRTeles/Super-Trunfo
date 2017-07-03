@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import controller.Baralho;
 import models.Carta;
+import protocols.ProtocoloEncerraTurno;
 import protocols.ProtocoloEnviaBaralho;
 import protocols.ProtocoloFimJogada;
 import protocols.ProtocoloInicioJogada;
@@ -23,8 +24,10 @@ public class Client{
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private Baralho baralho;
+	public Boolean perdi = false;
 	ProtocoloJogadaEscolhida protocolojogadaescolhida;
 	ProtocoloFimJogada protocolofimjogada;
+	ProtocoloEncerraTurno protocoloencerraturno;
 	
 	 
 
@@ -49,31 +52,58 @@ public class Client{
 	
 	public void rodaJogo() throws IOException, ClassNotFoundException {	
 		createSocket();
-		conexaoServer();	
-		inicioJogada();
-		fimJogada();	
+		conexaoServer();
+		while(!perdi){
+			inicioJogada();
+			Jogada();	
+			fimJogada();
+		}		
+	}
+	
+	public void fimJogada() throws IOException{
+		
+		if(baralho.getCartas().size() == 0){
+			perdi = true;
+			protocoloencerraturno = new ProtocoloEncerraTurno(true);
+		}else{
+			protocoloencerraturno = new ProtocoloEncerraTurno(false);
+		}
+		
+		sendsomething(oos,protocoloencerraturno);
 		
 	}
 	
-	public void fimJogada() throws ClassNotFoundException, IOException{
+	public void Jogada() throws ClassNotFoundException, IOException{
 		ProtocoloFimJogada protocol = (ProtocoloFimJogada)returnsomething(ois);
 		
 		System.out.println(protocol.getMensagem());
 		
 		java.util.List<Carta> auxCartas = protocol.getCartasRodada().getCartas();
 		
+		if(protocol.getIsGanhador()){
+			System.out.println("\nVoce ganhou a rodada. As cartas abaixo foram adicionadas no seu baralho.");
+		}else{
+			System.out.println("\nVoce perdeu a rodada. Confira as cartas da rodada:");
+		}
 		for (Carta carta : auxCartas) {
-			System.out.println(carta.toString());
 			
 			if(protocol.getIsGanhador()){
 				this.baralho.getCartas().add(this.baralho.getCartas().size()-1,carta);
-			}
+			
+			}			
+			System.out.println("\nCarta\n");
+			System.out.println("Nome: "+carta.getcNome());
+			System.out.println("Codigo: "+carta.getcCod());
+			System.out.println("Tipo: "+carta.getcTipo());
+			System.out.println("1. Peso:"+carta.getnPeso());
+			System.out.println("2. Velocidade: "+carta.getnVelocidade());
+			System.out.println("3. Altitude: "+carta.getnAltitude());
+			System.out.println("4. Comprimento: "+carta.getnComprimento());
+			System.out.println("5. Altura: "+carta.getnAltura());
 		}
 		
+		System.out.println("\nSeu baralho agora tem "+baralho.getCartas().size()+" cartas.");
 		
-		//if(protocol.getIsGanhador()){
-			
-		//}
 		
 	}
 	

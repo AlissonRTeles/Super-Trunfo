@@ -18,6 +18,7 @@ import java.util.Scanner;
 import controller.Baralho;
 import controller.LeitorArquivos;
 import models.Carta;
+import protocols.ProtocoloEncerraTurno;
 import protocols.ProtocoloEnviaBaralho;
 import protocols.ProtocoloFimJogada;
 import protocols.ProtocoloInicioJogada;
@@ -50,6 +51,7 @@ public class Server {
 	ProtocoloEnviaBaralho protocoloenviabaralho;
 	ProtocoloInicioJogada protocoloiniciojogada;
 	ProtocoloFimJogada protocolofimjogada;
+	ProtocoloEncerraTurno protocoloencerraturno;
 	
 	private Socket cliente;
 	
@@ -95,24 +97,6 @@ public class Server {
 			}
 		}
 		
-		/*
-		
-		for (int i = 0; i < nJogadores; i++) {
-
-			sendsomething(SendObjList.get(i),protocolo1);
-			returnsomething(RecvObjList.get(i));
-			sendsomething(SendObjList.get(i),protocolo1);
-	
-		}
-		
-		sendsomething(SendObjList.get(0),protocolo1);
-		sendsomething(SendObjList.get(1),protocolo1);
-
-		
-		returnsomething(RecvObjList.get(0));
-		returnsomething(RecvObjList.get(1));
-
-		*/
 	}
 	
 	public void rodaJogo() throws IOException, ClassNotFoundException {	
@@ -127,14 +111,28 @@ public class Server {
 		this.jogadorDaRodada = random.nextInt(nJogadores);
 		System.out.println("Jogador da Rodada:" +(jogadorDaRodada+1));
 		createSocket();
+		
+		
 		separaCartas();
 		aguardaJogadoresSk();
-		inicioJogada();
-		jogada();
 		
-		
+		while(true){
+			System.out.println("Iniciando Rodada "+nRodada);
+			inicioJogada();		
+			jogada();	
+			fimJogada();
+		}
 			
 		
+	}
+	
+	public void fimJogada() throws ClassNotFoundException, IOException{
+		for (int i = 0; i < nJogadores; i++) {
+			protocoloencerraturno = (ProtocoloEncerraTurno)returnsomething(RecvObjList.get(i));
+			if(protocoloencerraturno.getPerdi()){
+				players[i] = false;
+			}
+		}		
 	}
 	
 	public void inicioJogada() throws IOException{
@@ -186,23 +184,25 @@ public class Server {
 			if (pegaValorDoAtributo(cartas.get(i),atributoDaRodada) > bestValue){
 				bestValue = pegaValorDoAtributo(cartas.get(i),atributoDaRodada);
 				auxJogador = i;
+				System.out.println("\nbestValue:"+bestValue+" Jogador:"+auxJogador);
 			}
 		}
+		
+		jogadorDaRodada = auxJogador;
+		System.out.println("\nMaior Valor e "+bestValue+" do Jogador: "+auxJogador);
 		
 		for (int i = 0; i < nJogadores; i++) {
 			Baralho baralhoaux = new Baralho();
 			baralhoaux.setCartas(cartas);			
 			if(i != auxJogador){						
 				protocolofimjogada = new ProtocoloFimJogada(false, "Voce perdeu",baralhoaux);
+				sendsomething(SendObjList.get(i),protocolofimjogada);
 			}else{
-				protocolofimjogada = new ProtocoloFimJogada(true, "Voce perdeu",baralhoaux);
+				protocolofimjogada = new ProtocoloFimJogada(true, "Voce ganhou",baralhoaux);
+				sendsomething(SendObjList.get(i),protocolofimjogada);
 			}
 		}
-			
-		
-		
-		
-		
+		nRodada++;
 	}
 	
 	public void separaCartas() {
@@ -241,12 +241,6 @@ public class Server {
 		return(protocol);
 	}
 	
-	/*
-	public void returnsomething (ObjectInputStream ois) throws IOException, ClassNotFoundException{
-		ProtocoloEnviaBaralho protocoloteste = (ProtocoloEnviaBaralho)ois.readObject();			
-		System.out.println("Mensagem: "+protocoloteste.getcMensagem());
-	}
-	*/
 	
 	public float pegaValorDoAtributo (Carta carta, Integer atributo){
 		switch (atributo) {
