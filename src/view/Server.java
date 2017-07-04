@@ -35,6 +35,8 @@ public class Server {
 	private List<ObjectOutputStream> SendObjList = new ArrayList<ObjectOutputStream>();
 	private List<ObjectInputStream> RecvObjList = new ArrayList<ObjectInputStream>();
 	private List<Baralho> BaralhoList           = new ArrayList<Baralho>();
+	private Baralho baralhomodelo = new Baralho();
+	private Boolean alguemGanhou = false;
 	
 	
 	private Boolean[] players;
@@ -62,7 +64,7 @@ public class Server {
 		this.servidor = new ServerSocket(this.nPorta);		
 	}
 	
-	public void aguardaJogadoresSk() throws IOException, ClassNotFoundException{
+	public void aguardaJogadores() throws IOException, ClassNotFoundException{
 		
 		int nCount = 1;
 		
@@ -73,7 +75,7 @@ public class Server {
 				
 				Socket cliente = servidor.accept();
 				
-				protocoloenviabaralho = new ProtocoloEnviaBaralho("Voce e o jogador "+nCount, BaralhoList.get(nCount-1));
+				protocoloenviabaralho = new ProtocoloEnviaBaralho("Voce e o jogador "+nCount, BaralhoList.get(nCount-1), nCount, baralhomodelo.getCartas().size());
 
 				ObjectOutputStream  oos = new ObjectOutputStream(cliente.getOutputStream());
 				sendsomething(oos,protocoloenviabaralho);
@@ -102,22 +104,29 @@ public class Server {
 	public void rodaJogo() throws IOException, ClassNotFoundException {	
 		// -- carrega as cartas do jogo 
 		Init();		
-		
-		System.out.println("Informe o numero de jogadores:");	
-		
+		baralhomodelo.Init();
+		System.out.println("Informe o numero de jogadores:");			
 		this.nJogadores = in.nextInt();
+		
+		//Todos estão jogando
 		this.players = new Boolean[nJogadores];
 		Arrays.fill(players, Boolean.TRUE);
-		this.jogadorDaRodada = random.nextInt(nJogadores);
+		
+		//Define quem começa jogando
+		this.jogadorDaRodada = random.nextInt(nJogadores);		
 		System.out.println("Jogador da Rodada:" +(jogadorDaRodada+1));
-		createSocket();
 		
+		//Cria socket
+		createSocket();		
 		
+		//Divide baralho em x jogadores
 		separaCartas();
-		aguardaJogadoresSk();
 		
-		while(true){
-			System.out.println("Iniciando Rodada "+nRodada);
+		//Aguarda conexão dos jogadores
+		aguardaJogadores();
+		
+		while(!alguemGanhou){
+			System.out.println("\nIniciando Rodada "+nRodada);
 			inicioJogada();		
 			jogada();	
 			fimJogada();
@@ -126,27 +135,19 @@ public class Server {
 		
 	}
 	
-	public void fimJogada() throws ClassNotFoundException, IOException{
-		for (int i = 0; i < nJogadores; i++) {
-			protocoloencerraturno = (ProtocoloEncerraTurno)returnsomething(RecvObjList.get(i));
-			if(protocoloencerraturno.getPerdi()){
-				players[i] = false;
-			}
-		}		
-	}
-	
+
 	public void inicioJogada() throws IOException{
 		for (int i = 0; i < nJogadores; i++) {
 			//se não perdeu
 			if(players[i]){
 				if(i == jogadorDaRodada){
 					//Jogador que escolhe o atributo
-					protocoloiniciojogada = new ProtocoloInicioJogada(this.nJogada,Boolean.TRUE);
+					protocoloiniciojogada = new ProtocoloInicioJogada(this.nRodada,Boolean.TRUE);
 					sendsomething(SendObjList.get(i),protocoloiniciojogada);
 									
 				}else{
 					//Jogador que espera
-					protocoloiniciojogada = new ProtocoloInicioJogada(this.nJogada,Boolean.FALSE);
+					protocoloiniciojogada = new ProtocoloInicioJogada(this.nRodada,Boolean.FALSE);
 					sendsomething(SendObjList.get(i),protocoloiniciojogada);
 				}
 			}
@@ -160,50 +161,73 @@ public class Server {
 		System.out.println("Jogador da Rodada "+(jogadorDaRodada+1));
 		
 		for (int i = 0; i < (nJogadores); i++) {
-			if(i != jogadorDaRodada){
-				System.out.println("Aguardando Jogador "+(i+1));
-				ProtocoloJogadaEscolhida protocolo = (ProtocoloJogadaEscolhida)returnsomething(RecvObjList.get(i));
-				System.out.println("Recebi do "+(i+1)+"\n");
-				cartas.add(protocolo.getCartaEscolhida());
-			}		
-
-			
+			if(players[i]){
+				if(i != jogadorDaRodada){
+					System.out.println("Aguardando Jogador "+(i+1));
+					ProtocoloJogadaEscolhida protocolo = (ProtocoloJogadaEscolhida)returnsomething(RecvObjList.get(i));
+					System.out.println("Recebi do "+(i+1)+"\n");
+					cartas.add(protocolo.getCartaEscolhida());
+				}		
+			}
 		}
 		
 		System.out.println("Jogador da rodada:"+(jogadorDaRodada+1));
 		ProtocoloJogadaEscolhida protocolo = (ProtocoloJogadaEscolhida)returnsomething(RecvObjList.get(jogadorDaRodada));
 		System.out.println("Recebi do "+(jogadorDaRodada+1));
 		
-		cartas.add(protocolo.getCartaEscolhida());
+		//cartas.add(protocolo.getCartaEscolhida());
+		cartas.add(jogadorDaRodada, protocolo.getCartaEscolhida());
 		atributoDaRodada = protocolo.getAtributoEscolhido();
 		
 		Integer auxJogador = 0;
 		Float bestValue = 0F;
 		
 		for (int i = 0; i < nJogadores; i++) {
-			if (pegaValorDoAtributo(cartas.get(i),atributoDaRodada) > bestValue){
-				bestValue = pegaValorDoAtributo(cartas.get(i),atributoDaRodada);
-				auxJogador = i;
-				System.out.println("\nbestValue:"+bestValue+" Jogador:"+auxJogador);
+			if(players[i]){
+				System.out.println("Valor do jogador "+(i+1)+" : "+pegaValorDoAtributo(cartas.get(i),atributoDaRodada));
+				if (pegaValorDoAtributo(cartas.get(i),atributoDaRodada) > bestValue){
+					bestValue = pegaValorDoAtributo(cartas.get(i),atributoDaRodada);
+					auxJogador = i;
+				}
 			}
 		}
 		
 		jogadorDaRodada = auxJogador;
-		System.out.println("\nMaior Valor e "+bestValue+" do Jogador: "+auxJogador);
+
+		System.out.println("\nJogador "+(auxJogador+1)+" ganhou a rodada com o valor: "+bestValue);
 		
 		for (int i = 0; i < nJogadores; i++) {
-			Baralho baralhoaux = new Baralho();
-			baralhoaux.setCartas(cartas);			
-			if(i != auxJogador){						
-				protocolofimjogada = new ProtocoloFimJogada(false, "Voce perdeu",baralhoaux);
-				sendsomething(SendObjList.get(i),protocolofimjogada);
-			}else{
-				protocolofimjogada = new ProtocoloFimJogada(true, "Voce ganhou",baralhoaux);
-				sendsomething(SendObjList.get(i),protocolofimjogada);
+			if(players[i]){
+				Baralho baralhoaux = new Baralho();
+				baralhoaux.setCartas(cartas);			
+				if(i != auxJogador){						
+					protocolofimjogada = new ProtocoloFimJogada(false, "Voce perdeu",baralhoaux);
+					sendsomething(SendObjList.get(i),protocolofimjogada);
+				}else{
+					protocolofimjogada = new ProtocoloFimJogada(true, "Voce ganhou",baralhoaux);
+					sendsomething(SendObjList.get(i),protocolofimjogada);
+				}
 			}
 		}
 		nRodada++;
 	}
+	
+	public void fimJogada() throws ClassNotFoundException, IOException{
+		for (int i = 0; i < nJogadores; i++) {
+			if(players[i]){
+				protocoloencerraturno = (ProtocoloEncerraTurno)returnsomething(RecvObjList.get(i));
+				if(protocoloencerraturno.getPerdi()){
+					System.out.println("Jogador "+(i+1)+" perdeu o jogo.");
+					players[i] = false;
+				}
+				if(protocoloencerraturno.getGanhei()){
+					System.out.println("\n\n\n\nJogador "+(i+1)+" ganhou o jogo!!!");
+					alguemGanhou = true;
+				}
+			}
+		}		
+	}
+	
 	
 	public void separaCartas() {
 		int nCountJgr = 0;
